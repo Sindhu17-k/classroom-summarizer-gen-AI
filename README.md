@@ -8,11 +8,24 @@
 
 # Features
 - Audio to Text
--  Bullet Point Summarizer
+- Bullet Point Summarizer
 - Flashcard Generator
 - Mind Map Visualizer
 
-Backend: Python, FastAPI
-- ML Libraries: PyTorch, Transformers, spaCy, torchaudio
-- Frontend (Planned): React.js, TailwindCSS
-- Deployment (Planned): Docker, Render/Vercel
+
+PROJECT SRUCTURE
+│
+├── README.md                Project overview and setup instructions
+├── requirements.txt         Python dependencies
+├── data/                    Datasets: audio files, transcripts, text data
+├── models/                  trained machine learning models
+├── src/                     Core source code
+│   ├── asr/                 Audio-to-text modules 
+│   ├── summarizer/          Text summarization modules 
+│   ├── flashcards/          Q&A generation modules 
+│   ├── mindmap/             Entity extraction and mind map generation modules
+│   └── utils/               Utility functions (tokenization, data processing, etc.)
+└── backend/                 Backend API server (e.g., FastAPI)
+    ├── main.py              API entry point
+    └── routes/              API route handlers (summarize, flashcards, mindmap)
+
