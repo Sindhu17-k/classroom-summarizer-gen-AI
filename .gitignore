@@ -1,1 +1,32 @@
+# Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+
+.ipynb_checkpoints/
+
+# Node modules (if any frontend with npm/yarn)
+node_modules/
+
+# Build artifacts
+build/
+dist/
+
+
+venv/
+env/
+
+# Logs
+*.log
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
 
