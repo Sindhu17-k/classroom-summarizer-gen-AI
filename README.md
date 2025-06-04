@@ -1,4 +1,4 @@
-# Classroom-summarizer-gen-ai
+# classroom-summarizer-gen-ai
   A Smart assistant that helps students understand and revise lectures by;
 -  Bullet point summaries  
 -  Flashcards (Q&A format)  
