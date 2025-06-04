@@ -1,11 +1,5 @@
 # classroom-summarizer-gen-AI
- smart assistant that helps students understand and revise lectures by:
-- Converting lecture :audio into text
-- Generating: bullet point summaries
-- Creating :Q&A flashcards
-- Drawing :mind maps of the lecture
-
-
+ smart assistant that helps students understand and revise lectures bY
 # Features
 - Audio to Text
 - Bullet Point Summarizer
@@ -15,7 +9,7 @@
 
 PROJECT SRUCTURE
 │
-├── README.md            
+ README.md            
 ├── requirements.txt        
 ├── data/  Datasets
 ├── models/trained ml models
