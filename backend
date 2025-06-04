@@ -1,0 +1,106 @@
+# Simple Lecture Summarizer Backend
+# Very basic version for beginners
+
+class LectureSummarizer:
+    def __init__(self):
+        self.lectures = []  # Store lectures
+    
+    # Function 1: Add a lecture
+    def add_lecture(self, text, student_name):
+        """Add a new lecture"""
+        lecture = {
+            'id': len(self.lectures) + 1,
+            'text': text,
+            'student': student_name
+        }
+        self.lectures.append(lecture)
+        return lecture['id']
+    
+    # Function 2: Make bullet points
+    def make_bullet_points(self, lecture_id):
+        """Turn lecture into bullet points"""
+        # Find the lecture
+        lecture = None
+        for lec in self.lectures:
+            if lec['id'] == lecture_id:
+                lecture = lec
+                break
+        
+        if not lecture:
+            return "Lecture not found"
+        
+        # Split text into sentences
+        sentences = lecture['text'].split('.')
+        bullet_points = []
+        
+        # Take first 5 sentences as bullet points
+        for i in range(min(5, len(sentences))):
+            sentence = sentences[i].strip()
+            if len(sentence) > 10:  # Only if sentence is long enough
+                bullet_points.append(f"• {sentence}")
+        
+        return bullet_points
+    
+    # Function 3: Make flashcards
+    def make_flashcards(self, lecture_id):
+        """Create simple flashcards"""
+        # Find the lecture
+        lecture = None
+        for lec in self.lectures:
+            if lec['id'] == lecture_id:
+                lecture = lec
+                break
+        
+        if not lecture:
+            return "Lecture not found"
+        
+        text = lecture['text']
+        sentences = text.split('.')
+        flashcards = []
+        
+        # Make flashcards from sentences
+        for i in range(min(3, len(sentences))):
+            sentence = sentences[i].strip()
+            if len(sentence) > 20:
+                card = {
+                    'question': f"What is this about: {sentence[:20]}...?",
+                    'answer': sentence
+                }
+                flashcards.append(card)
+        
+        return flashcards
+    
+    # Function 4: Get all lectures for a student
+    def get_student_lectures(self, student_name):
+        """Get all lectures for one student"""
+        student_lectures = []
+        for lecture in self.lectures:
+            if lecture['student'] == student_name:
+                student_lectures.append(lecture)
+        return student_lectures
+
+# Simple example to test the code
+if __name__ == "__main__":
+    # Create the summarizer
+    summarizer = LectureSummarizer()
+    
+    # Add a sample lecture
+    sample_text = "Plants make food through photosynthesis. This process uses sunlight and water. Chlorophyll helps plants capture light. Plants produce oxygen as a result."
+    
+    lecture_id = summarizer.add_lecture(sample_text, "John")
+    print(f"Added lecture with ID: {lecture_id}")
+    
+    # Make bullet points
+    bullets = summarizer.make_bullet_points(lecture_id)
+    print("\nBullet Points:")
+    for bullet in bullets:
+        print(bullet)
+    
+    # Make flashcards
+    cards = summarizer.make_flashcards(lecture_id)
+    print(f"\nFlashcards ({len(cards)}):")
+    for i, card in enumerate(cards, 1):
+        print(f"Card {i}:")
+        print(f"Q: {card['question']}")
+        print(f"A: {card['answer']}")
+        print()backend 
