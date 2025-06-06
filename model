@@ -1,1 +1,46 @@
+!pip install transformers
+!pip install PyPDF2
+!pip install sentencepiece
 
+ import pipeline
+import PyPDF2
+
+
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+ extract_text_from_pdf(pdf_path):
+    with open(pdf_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text()
+    return text
+
+
+def summarize_text(text, max_chunk=1000):
+    sentences = text.split(". ")
+    current_chunk = ""
+    summaries = []
+    
+    for sentence in sentences:
+        if len(current_chunk) + len(sentence) <= max_chunk:
+            current_chunk += sentence + ". "
+        else:
+            summary = summarizer(current_chunk, max_length=120, min_length=30, do_sample=False)[0]['summary_text']
+            summaries.append(summary)
+            current_chunk = sentence + ". "
+    
+    if current_chunk:
+        summary = summarizer(current_chunk, max_length=120, min_length=30, do_sample=False)[0]['summary_text']
+        summaries.append(summary)
+    
+    return " ".join(summaries)
+
+
+uploaded = files.upload()
+
+for filename in uploaded:
+    text = extract_text_from_pdf(filename)
+    summary = summarize_text(text)
+    print("\n--- Summary ---\n")
+    print(summary)
