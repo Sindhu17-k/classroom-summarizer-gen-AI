@@ -1,0 +1,168 @@
+#1)QnASection.jsx
+
+import { useState } from 'react';
+import axios from 'axios';
+
+export default function QnASection() {
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleAsk = async () => {
+    if (!question.trim()) {
+      alert("Please type a question first.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:5000/ask', { question });
+      setAnswer(response.data.answer);
+    } catch (err) {
+      alert("Something went wrong. Try again!");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white shadow p-4 rounded">
+      <input
+        type="text"
+        value={question}
+        onChange={e => setQuestion(e.target.value)}
+        placeholder="Ask something like: What is photosynthesis?"
+        className="w-full px-3 py-2 mb-2 border rounded"
+      />
+      <button
+        onClick={handleAsk}
+        className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+      >
+        {loading ? 'Thinking...' : 'Get Answer'}
+      </button>
+
+      {answer && (
+        <div className="mt-4">
+          <h3 className="font-semibold text-lg">💡 Answer:</h3>
+          <p className="bg-gray-100 p-3 rounded text-sm">{answer}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+#2)AudioUpload.jsx
+
+import { useState } from 'react';
+import axios from 'axios';
+
+export default function AudioUpload() {
+  const [file, setFile] = useState(null);
+  const [transcript, setTranscript] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleUpload = async () => {
+    if (!file) {
+      alert("Please choose an audio or video file first.");
+      return;
+    }
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('audio', file);
+
+    try {
+      const response = await axios.post('http://localhost:5000/transcribe', formData);
+      setTranscript(response.data.transcript);
+    } catch (err) {
+      alert("Error transcribing. Try again later.");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white shadow p-4 rounded">
+      <input
+        type="file"
+        accept="audio/*,video/*"
+        onChange={e => setFile(e.target.files[0])}
+        className="mb-2"
+      />
+      <button
+        onClick={handleUpload}
+        className="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700"
+      >
+        {loading ? 'Listening...' : 'Transcribe Lecture'}
+      </button>
+
+      {transcript && (
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold">📝 Transcript:</h3>
+          <p className="bg-gray-100 p-3 rounded text-sm whitespace-pre-wrap">{transcript}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+#3)TranscriptUploader.jsx
+
+import { useState } from 'react';
+import axios from 'axios';
+
+export default function TranscriptUploader() {
+  const [text, setText] = useState('');
+  const [summary, setSummary] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSummarize = async () => {
+    if (!text.trim()) {
+      alert("Please paste or type the transcript first.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:5000/summarize-transcript', { transcript: text });
+      setSummary(response.data.summary);
+    } catch (err) {
+      alert("Could not generate summary. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white shadow p-4 rounded">
+      <textarea
+        rows="6"
+        className="w-full p-3 border rounded mb-2"
+        placeholder="Paste the transcript here..."
+        value={text}
+        onChange={e => setText(e.target.value)}
+      ></textarea>
+      <button
+        onClick={handleSummarize}
+        className="bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700"
+      >
+        {loading ? 'Summarizing...' : 'Get Summary'}
+      </button>
+
+      {summary && (
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold">📄 Summary:</h3>
+          <p className="bg-gray-100 p-3 rounded text-sm whitespace-pre-wrap">{summary}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+#api.js(inside the handleUpload function of the PdfUploader.jsx component.)
+
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:5000',
+});
+
+export default api;
+
