@@ -1,0 +1,22 @@
+# Install Whisper and dependencies
+!pip install -U openai-whisper
+!sudo apt update && sudo apt install ffmpeg
+
+# Import required libraries
+import whisper
+from google.colab import files
+
+#Upload your classroom audio file
+uploaded = files.upload()  # Upload a .mp3, .wav, or .m4a file
+
+#Load the Whisper model
+model = whisper.load_model("base") 
+
+#Transcribe the uploaded file
+# Get the file name from the upload
+file_name = list(uploaded.keys())[0]
+result = model.transcribe(file_name)
+
+# Print the transcription
+print("\n🔊 Transcription:\n")
+print(result["text"])
