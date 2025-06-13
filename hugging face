@@ -1,0 +1,22 @@
+# Install Required Libraries
+!pip install transformers sentencepiece
+
+#Import Libraries
+from transformers import pipeline
+
+#Load the Summarization Pipeline
+summarizer = pipeline("summarization", model="t5-small")
+
+#Define Your Classroom Text
+text = """
+In today's class, we discussed the basics of Thermodynamics. The first law of thermodynamics states that energy can neither be created nor destroyed,
+only converted from one form to another. We also covered the concept of internal energy, heat transfer, and work done by a system.
+Next, we looked at different types of thermodynamic processes such as isothermal, adiabatic, and isobaric processes.
+Students were encouraged to solve example problems from the textbook to reinforce their understanding.
+"""
+
+#Generate the Summary
+summary = summarizer(text, max_length=50, min_length=25, do_sample=False)
+
+# Show the Summary
+print("✅ Summary:\n", summary[0]['summary_text'])
