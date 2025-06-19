@@ -1,0 +1,2 @@
+# 🔧 STEP 1: Install Required Libraries
+!pip install fastapi pyngrok uvicorn PyPDF2 torch networkx matplotlib nest_asyncio pydantic sentence_transformers
