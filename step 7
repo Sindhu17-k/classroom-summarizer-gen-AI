@@ -1,0 +1,28 @@
+# 🔧 STEP 7: Generate a basic mind map using keyword graph
+@app.get("/mindmap/")
+def mind_map():
+    with open("lecture.txt", "r") as f:
+        text = f.read().lower()
+
+    # Extract keywords (simple version)
+    keywords = [word for word in text.split() if len(word) > 5]
+    freq = {}
+    for word in keywords:
+        freq[word] = freq.get(word, 0) + 1
+    sorted_words = sorted(freq.items(), key=lambda x: x[1], reverse=True)[:10]
+
+    # Create mind map graph
+    G = nx.Graph()
+    central = "Lecture"
+    G.add_node(central)
+    for word, _ in sorted_words:
+        G.add_node(word)
+        G.add_edge(central, word)
+
+    # Draw mind map
+    plt.figure(figsize=(8, 6))
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=2000, font_size=12)
+    plt.savefig("mindmap.png")
+
+    return FileResponse("mindmap.png", media_type="image/png")
