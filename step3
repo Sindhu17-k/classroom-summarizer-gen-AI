@@ -1,0 +1,19 @@
+# 🔧 STEP 3: Define a minimal custom Transformer model
+class SimpleTransformer(nn.Module):
+    def _init_(self, vocab_size=5000, d_model=64, nhead=4, nlayers=2, dim_feed=128):
+        super()._init_()
+        self.embed = nn.Embedding(vocab_size, d_model)
+        encoder_layer = nn.TransformerEncoderLayer(d_model, nhead, dim_feed)
+        self.encoder = nn.TransformerEncoder(encoder_layer, nlayers)
+        decoder_layer = nn.TransformerDecoderLayer(d_model, nhead, dim_feed)
+        self.decoder = nn.TransformerDecoder(decoder_layer, nlayers)
+        self.output = nn.Linear(d_model, vocab_size)
+
+    def forward(self, src, tgt):
+        src = self.embed(src)
+        tgt = self.embed(tgt)
+        memory = self.encoder(src)
+        out = self.decoder(tgt, memory)
+        return self.output(out)
+
+model = SimpleTransformer()
