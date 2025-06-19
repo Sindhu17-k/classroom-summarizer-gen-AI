@@ -1,0 +1,11 @@
+# 🔧 STEP 5: Basic summarizer using scoring
+@app.get("/summarize/")
+def summarize():
+    with open("lecture.txt", "r") as f:
+        text = f.read()
+
+    sentences = text.split(". ")
+    scored = sorted(sentences, key=lambda s: len(s), reverse=True)
+    top = scored[:5]  # top 5 longest, basic summarization logic
+    summary = ". ".join(top)
+    return {"summary": summary}
