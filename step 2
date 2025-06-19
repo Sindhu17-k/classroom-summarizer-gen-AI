@@ -1,0 +1,15 @@
+# 🔧 STEP 2: Import modules and set up FastAPI app
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+import PyPDF2
+import io
+import torch
+import torch.nn as nn
+import networkx as nx
+import matplotlib.pyplot as plt
+from pyngrok import ngrok
+import nest_asyncio
+import uvicorn
+
+app = FastAPI()
