@@ -1,0 +1,11 @@
+# 🔧 STEP 4: Handle PDF upload and extract text
+@app.post("/upload-pdf/")
+async def upload_pdf(file: UploadFile = File(...)):
+    contents = await file.read()
+    reader = PyPDF2.PdfReader(io.BytesIO(contents))
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text()
+    with open("lecture.txt", "w") as f:
+        f.write(text)
+    return {"message": "PDF uploaded and text extracted successfully!"}
