@@ -1,0 +1,18 @@
+# 🔧 STEP 6: Simple Q&A using keyword match
+class Question(BaseModel):
+    question: str
+
+@app.post("/ask/")
+def ask_qn(q: Question):
+    with open("lecture.txt", "r") as f:
+        text = f.read().lower()
+    question = q.question.lower()
+    words = question.split()
+    best_line = ""
+    max_overlap = 0
+    for line in text.split("."):
+        overlap = len(set(words) & set(line.strip().split()))
+        if overlap > max_overlap:
+            best_line = line.strip()
+            max_overlap = overlap
+    return {"answer": best_line if best_line else "Sorry, I couldn’t find a relevant answer."}
