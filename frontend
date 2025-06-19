@@ -1,0 +1,70 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+
+const BASE_URL = "https://203a-34-106-244-226.ngrok-free.app";
+
+export default function PdfUpload() {
+  const [file, setFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setUploadSuccess(false);
+    setErrorMessage("");
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+    setIsUploading(true);
+    setErrorMessage("");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post(${BASE_URL}/upload-pdf/, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setUploadSuccess(true);
+      alert("✅ PDF uploaded successfully!");
+    } catch (error) {
+      setUploadSuccess(false);
+      if (error.response) {
+        console.error("❌ Upload failed: Response error", error.response);
+        setErrorMessage(Server responded with status ${error.response.status});
+      } else if (error.request) {
+        console.error("❌ Upload failed: No response received", error.request);
+        setErrorMessage("No response from server. Please ensure the backend is running.");
+      } else {
+        console.error("❌ Upload failed: Request setup error", error.message);
+        setErrorMessage("Request setup failed: " + error.message);
+      }
+      alert("Upload failed. Please check the console for more details.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <h2 className="text-xl font-semibold mb-4">Upload Lecture PDF</h2>
+      <input
+        type="file"
+        onChange={handleFileChange}
+        className="mb-4 block w-full border border-gray-300 rounded p-2"
+      />
+      <Button
+        onClick={handleUpload}
+        disabled={!file || isUploading}
+        className="w-full"
+      >
+        {isUploading ? "Uploading..." : "Upload PDF"}
+      </Button>
+      {errorMessage && <p className="mt-2 text-red-500 text-sm">{errorMessage}</p>}
+      {uploadSuccess && <p className="mt-2 text-green-600 text-sm">Upload successful!</p>}
+    </div>
+  );
+}
