@@ -1,0 +1,8 @@
+# 🚀 Final Step: Launch FastAPI with ngrok
+import nest_asyncio
+nest_asyncio.apply()
+
+public_url = ngrok.connect(8000)
+print("🚀 Your public FastAPI URL:", public_url)
+
+uvicorn.run(app, port=8000)
